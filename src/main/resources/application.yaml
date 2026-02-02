@@ -2,6 +2,13 @@ spring:
   application:
     name: gameadmin
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8180/realms/gameadmin-realm
+          jwk-set-uri: http://localhost:8180/realms/gameadmin-realm/protocol/openid-connect/certs
+
   datasource:
     url: jdbc:postgresql://localhost:5432/gameadmin
     username: postgres
