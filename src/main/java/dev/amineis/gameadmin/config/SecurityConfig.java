@@ -53,7 +53,7 @@ public class SecurityConfig {
                 List<String> roles = (List<String>) realmAccess.get("roles");
                 if (roles != null) {
                     roles.forEach(role ->
-                        authorities.add(new SimpleGrantedAuthority("ROLE_" + role))
+                        authorities.add(new SimpleGrantedAuthority(role))
                     );
                 }
             }
