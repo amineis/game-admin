@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class AppUserController {
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> getAllAppUsers() {
-        return ResponseEntity.ok("hello");
+        return ResponseEntity.ok("hello admin");
     }
 
     @GetMapping("/me")
