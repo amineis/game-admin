@@ -1,7 +1,7 @@
 spring:
   output:
     ansi:
-      enabled: always
+      enabled: ALWAYS
   application:
     name: gameadmin
 

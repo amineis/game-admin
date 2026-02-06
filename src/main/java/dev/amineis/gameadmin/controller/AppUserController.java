@@ -18,7 +18,7 @@ public class AppUserController {
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> getAllAppUsers() {
-        return ResponseEntity.ok("hello");
+        return ResponseEntity.ok("hello admin");
     }
 
     @GetMapping("/me")

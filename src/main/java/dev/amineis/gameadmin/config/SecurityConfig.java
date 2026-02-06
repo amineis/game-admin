@@ -63,13 +63,13 @@ public class SecurityConfig {
             Map<String, Object> resourceAccess = jwt.getClaim("resource_access");
             if (resourceAccess != null) {
                 @SuppressWarnings("unchecked")
-                Map<String, Object> clientAccess = (Map<String, Object>) resourceAccess.get("gameadmin-client");
+                Map<String, Object> clientAccess = (Map<String, Object>) resourceAccess.get("gameadmin-api");
                 if (clientAccess != null) {
                     @SuppressWarnings("unchecked")
                     List<String> clientRoles = (List<String>) clientAccess.get("roles");
                     if (clientRoles != null) {
                         clientRoles.forEach(role ->
-                            authorities.add(new SimpleGrantedAuthority("ROLE_" + role))
+                            authorities.add(new SimpleGrantedAuthority(role))
                         );
                     }
                 }
