@@ -17,7 +17,5 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
 
     Page<Player> findByUsernameContainingIgnoreCase(String username, Pageable pageable);
 
-    Page<Player> findByIsBanned(Boolean isBanned, Pageable pageable);
-
     Page<Player> findByCountry(String country, Pageable pageable);
 }
