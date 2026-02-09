@@ -23,6 +23,10 @@ public class Ban {
     @JoinColumn(name = "player_id", nullable = false)
     private Player player;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "game_id", nullable = false)
+    private Game game;
+
     @Column(nullable = false)
     private String reason;
 

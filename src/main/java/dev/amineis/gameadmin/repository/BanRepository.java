@@ -14,9 +14,13 @@ public interface BanRepository extends JpaRepository<Ban, Long> {
 
     List<Ban> findByPlayerId(Long playerId);
 
-    Optional<Ban> findTopByPlayerIdOrderByCreatedAtDesc(Long playerId);
+    Optional<Ban> findByPlayerIdAndGameId(Long playerId, Long gameId);
+
+    Page<Ban> findByGameId(Long gameId, Pageable pageable);
 
     Page<Ban> findByBannedByUserId(Long userId, Pageable pageable);
+
+    boolean existsByPlayerIdAndGameId(Long playerId, Long gameId);
 
     boolean existsByPlayerId(Long playerId);
 }

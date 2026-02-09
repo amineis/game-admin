@@ -25,14 +25,6 @@ public class Player {
     @Column(length = 2)
     private String country;
 
-    @Builder.Default
-    @Column(nullable = false)
-    private Integer mmr = 1000;
-
-    @Builder.Default
-    @Column(name = "is_banned", nullable = false)
-    private Boolean isBanned = false;
-
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
