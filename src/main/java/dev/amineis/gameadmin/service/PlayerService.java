@@ -77,6 +77,14 @@ public class PlayerService {
         return playerMapper.toResponse(updated);
     }
 
+    @Transactional
+    public void deletePlayer(Long id) {
+        if (!playerRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Player", id);
+        }
+        playerRepository.deleteById(id);
+    }
+
     private PagedResponse<PlayerResponse> toPagedResponse(Page<Player> page) {
         return PagedResponse.<PlayerResponse>builder()
                 .content(page.getContent().stream().map(playerMapper::toResponse).toList())
