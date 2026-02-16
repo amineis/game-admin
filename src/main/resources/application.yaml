@@ -1,3 +1,5 @@
+server:
+  port: 8084
 spring:
   output:
     ansi:
@@ -9,13 +11,13 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8081/realms/gameadmin-realm
-          jwk-set-uri: http://localhost:8081/realms/gameadmin-realm/protocol/openid-connect/certs
+          issuer-uri: ${ISSUER_URI}
+          jwk-set-uri: ${JWK_SET_URI}
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/gameadmin
-    username: postgres
-    password: root
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
   flyway:
