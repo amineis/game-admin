@@ -50,6 +50,12 @@ services:
       dockerfile: Dockerfile
     container_name: gameadmin-app
     restart: unless-stopped
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/gameadmin
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWK_SET_URI: http://keycloak:8080/realms/gameadmin-realm/protocol/openid-connect/certs
+      ISSUER_URI: ${ISSUER_URI}
     depends_on:
       - postgres
       - keycloak
