@@ -9,17 +9,20 @@ import org.springframework.web.servlet.function.ServerResponse;
 @Configuration
 public class ScalarConfig {
 
-    @Bean
-    public RouterFunction<ServerResponse> scalarRouter() {
-        return RouterFunctions.route()
-            .GET("/scalar.html", request -> ServerResponse.ok()
-                .headers(headers -> headers.set("Content-Type", "text/html"))
-                .body(scalarHtml()))
-            .build();
-    }
+  @Bean
+  public RouterFunction<ServerResponse> scalarRouter() {
+    return RouterFunctions.route()
+        .GET(
+            "/scalar.html",
+            request ->
+                ServerResponse.ok()
+                    .headers(headers -> headers.set("Content-Type", "text/html"))
+                    .body(scalarHtml()))
+        .build();
+  }
 
-    private String scalarHtml() {
-        return """
+  private String scalarHtml() {
+    return """
             <!DOCTYPE html>
             <html>
             <head>
@@ -51,5 +54,5 @@ public class ScalarConfig {
             </body>
             </html>
             """;
-    }
+  }
 }

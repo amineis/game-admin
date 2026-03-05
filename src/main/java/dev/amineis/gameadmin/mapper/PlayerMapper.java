@@ -10,13 +10,13 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface PlayerMapper {
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    Player toEntity(PlayerCreateRequest playerCreateRequest);
+  @Mapping(target = "id", ignore = true)
+  @Mapping(target = "createdAt", ignore = true)
+  Player toEntity(PlayerCreateRequest playerCreateRequest);
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    Player toEntity(PlayerUpdateRequest playerUpdateRequest);
+  @Mapping(target = "id", ignore = true)
+  @Mapping(target = "createdAt", ignore = true)
+  Player toEntity(PlayerUpdateRequest playerUpdateRequest);
 
-    PlayerResponse toResponse(Player player);
+  PlayerResponse toResponse(Player player);
 }

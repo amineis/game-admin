@@ -20,75 +20,76 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class GameService {
 
-    private final GameRepository gameRepository;
-    private final GameMapper gameMapper;
+  private final GameRepository gameRepository;
+  private final GameMapper gameMapper;
 
-    @Transactional(readOnly = true)
-    public PagedResponse<GameResponse> getAllGames(Pageable pageable) {
-        return toPagedResponse(gameRepository.findAll(pageable));
+  @Transactional(readOnly = true)
+  public PagedResponse<GameResponse> getAllGames(Pageable pageable) {
+    return toPagedResponse(gameRepository.findAll(pageable));
+  }
+
+  @Transactional(readOnly = true)
+  public GameResponse getGameById(Long id) {
+    Game game =
+        gameRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Game", id));
+    return gameMapper.toResponse(game);
+  }
+
+  @Transactional(readOnly = true)
+  public PagedResponse<GameResponse> searchByName(String name, Pageable pageable) {
+    return toPagedResponse(gameRepository.findByNameContainingIgnoreCase(name, pageable));
+  }
+
+  @Transactional(readOnly = true)
+  public PagedResponse<GameResponse> getGamesByGenre(Genre genre, Pageable pageable) {
+    return toPagedResponse(gameRepository.findByGenre(genre, pageable));
+  }
+
+  @Transactional
+  public GameResponse createGame(GameCreateRequest request) {
+    if (gameRepository.existsByName(request.getName())) {
+      throw new BusinessRuleException("Game with name '" + request.getName() + "' already exists");
+    }
+    Game saved = gameRepository.save(gameMapper.toEntity(request));
+    return gameMapper.toResponse(saved);
+  }
+
+  @Transactional
+  public GameResponse updateGame(Long id, GameUpdateRequest request) {
+    Game game =
+        gameRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Game", id));
+
+    if (request.getName() != null && !request.getName().equals(game.getName())) {
+      if (gameRepository.existsByName(request.getName())) {
+        throw new BusinessRuleException(
+            "Game with name '" + request.getName() + "' already exists");
+      }
+      game.setName(request.getName());
     }
 
-    @Transactional(readOnly = true)
-    public GameResponse getGameById(Long id) {
-        Game game = gameRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Game", id));
-        return gameMapper.toResponse(game);
+    if (request.getGenre() != null) {
+      game.setGenre(request.getGenre());
     }
 
-    @Transactional(readOnly = true)
-    public PagedResponse<GameResponse> searchByName(String name, Pageable pageable) {
-        return toPagedResponse(gameRepository.findByNameContainingIgnoreCase(name, pageable));
+    return gameMapper.toResponse(gameRepository.save(game));
+  }
+
+  @Transactional
+  public void deleteGame(Long id) {
+    if (!gameRepository.existsById(id)) {
+      throw new ResourceNotFoundException("Game", id);
     }
+    gameRepository.deleteById(id);
+  }
 
-    @Transactional(readOnly = true)
-    public PagedResponse<GameResponse> getGamesByGenre(Genre genre, Pageable pageable) {
-        return toPagedResponse(gameRepository.findByGenre(genre, pageable));
-    }
-
-    @Transactional
-    public GameResponse createGame(GameCreateRequest request) {
-        if (gameRepository.existsByName(request.getName())) {
-            throw new BusinessRuleException("Game with name '" + request.getName() + "' already exists");
-        }
-        Game saved = gameRepository.save(gameMapper.toEntity(request));
-        return gameMapper.toResponse(saved);
-    }
-
-    @Transactional
-    public GameResponse updateGame(Long id, GameUpdateRequest request) {
-        Game game = gameRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Game", id));
-
-        if (request.getName() != null && !request.getName().equals(game.getName())) {
-            if (gameRepository.existsByName(request.getName())) {
-                throw new BusinessRuleException("Game with name '" + request.getName() + "' already exists");
-            }
-            game.setName(request.getName());
-        }
-
-        if (request.getGenre() != null) {
-            game.setGenre(request.getGenre());
-        }
-
-        return gameMapper.toResponse(gameRepository.save(game));
-    }
-
-    @Transactional
-    public void deleteGame(Long id) {
-        if (!gameRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Game", id);
-        }
-        gameRepository.deleteById(id);
-    }
-
-    private PagedResponse<GameResponse> toPagedResponse(Page<Game> page) {
-        return PagedResponse.<GameResponse>builder()
-                .content(page.getContent().stream().map(gameMapper::toResponse).toList())
-                .page(page.getNumber())
-                .size(page.getSize())
-                .totalElements(page.getTotalElements())
-                .totalPages(page.getTotalPages())
-                .last(page.isLast())
-                .build();
-    }
+  private PagedResponse<GameResponse> toPagedResponse(Page<Game> page) {
+    return PagedResponse.<GameResponse>builder()
+        .content(page.getContent().stream().map(gameMapper::toResponse).toList())
+        .page(page.getNumber())
+        .size(page.getSize())
+        .totalElements(page.getTotalElements())
+        .totalPages(page.getTotalPages())
+        .last(page.isLast())
+        .build();
+  }
 }

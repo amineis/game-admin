@@ -15,12 +15,18 @@ import lombok.*;
 @Schema(description = "Request body to create a new game")
 public class GameCreateRequest {
 
-    @Schema(description = "Game name", example = "League of Legends", requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotBlank(message = "Game name is required")
-    @Size(max = 100, message = "Game name must not exceed 100 characters")
-    private String name;
+  @Schema(
+      description = "Game name",
+      example = "League of Legends",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @NotBlank(message = "Game name is required")
+  @Size(max = 100, message = "Game name must not exceed 100 characters")
+  private String name;
 
-    @Schema(description = "Genre: FPS, MOBA, RPG, STRATEGY, SPORTS", example = "MOBA", requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotNull(message = "Genre is required")
-    private Genre genre;
+  @Schema(
+      description = "Genre: FPS, MOBA, RPG, STRATEGY, SPORTS",
+      example = "MOBA",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @NotNull(message = "Genre is required")
+  private Genre genre;
 }

@@ -31,62 +31,102 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class GameController {
 
-    private final GameService gameService;
+  private final GameService gameService;
 
-    @GetMapping
-    @Operation(summary = "List all games", description = "Returns a paginated list of games.")
-    @ApiResponses({ @ApiResponse(responseCode = "200", description = "Success"), @ApiResponse(responseCode = "401", description = "Unauthorized"), @ApiResponse(responseCode = "403", description = "Forbidden") })
-    @PreAuthorize("hasAnyAuthority('ADMIN','MODERATOR','SUPPORT')")
-    public ResponseEntity<PagedResponse<GameResponse>> getAllGames(Pageable pageable) {
-        return ResponseEntity.ok(gameService.getAllGames(pageable));
-    }
+  @GetMapping
+  @Operation(summary = "List all games", description = "Returns a paginated list of games.")
+  @ApiResponses({
+    @ApiResponse(responseCode = "200", description = "Success"),
+    @ApiResponse(responseCode = "401", description = "Unauthorized"),
+    @ApiResponse(responseCode = "403", description = "Forbidden")
+  })
+  @PreAuthorize("hasAnyAuthority('ADMIN','MODERATOR','SUPPORT')")
+  public ResponseEntity<PagedResponse<GameResponse>> getAllGames(Pageable pageable) {
+    return ResponseEntity.ok(gameService.getAllGames(pageable));
+  }
 
-    @GetMapping("/{id}")
-    @Operation(summary = "Get game by ID", description = "Returns a single game by id.")
-    @ApiResponses({ @ApiResponse(responseCode = "200", description = "Success"), @ApiResponse(responseCode = "401", description = "Unauthorized"), @ApiResponse(responseCode = "403", description = "Forbidden"), @ApiResponse(responseCode = "404", description = "Game not found") })
-    @PreAuthorize("hasAnyAuthority('ADMIN','MODERATOR','SUPPORT')")
-    public ResponseEntity<GameResponse> getGameById(@PathVariable Long id) {
-        return ResponseEntity.ok(gameService.getGameById(id));
-    }
+  @GetMapping("/{id}")
+  @Operation(summary = "Get game by ID", description = "Returns a single game by id.")
+  @ApiResponses({
+    @ApiResponse(responseCode = "200", description = "Success"),
+    @ApiResponse(responseCode = "401", description = "Unauthorized"),
+    @ApiResponse(responseCode = "403", description = "Forbidden"),
+    @ApiResponse(responseCode = "404", description = "Game not found")
+  })
+  @PreAuthorize("hasAnyAuthority('ADMIN','MODERATOR','SUPPORT')")
+  public ResponseEntity<GameResponse> getGameById(@PathVariable Long id) {
+    return ResponseEntity.ok(gameService.getGameById(id));
+  }
 
-    @GetMapping("/search")
-    @Operation(summary = "Search games by name", description = "Returns games whose name contains the given string (paginated).")
-    @ApiResponses({ @ApiResponse(responseCode = "200", description = "Success"), @ApiResponse(responseCode = "401", description = "Unauthorized"), @ApiResponse(responseCode = "403", description = "Forbidden") })
-    @PreAuthorize("hasAnyAuthority('ADMIN','MODERATOR','SUPPORT')")
-    public ResponseEntity<PagedResponse<GameResponse>> searchByName(@RequestParam String name, Pageable pageable) {
-        return ResponseEntity.ok(gameService.searchByName(name, pageable));
-    }
+  @GetMapping("/search")
+  @Operation(
+      summary = "Search games by name",
+      description = "Returns games whose name contains the given string (paginated).")
+  @ApiResponses({
+    @ApiResponse(responseCode = "200", description = "Success"),
+    @ApiResponse(responseCode = "401", description = "Unauthorized"),
+    @ApiResponse(responseCode = "403", description = "Forbidden")
+  })
+  @PreAuthorize("hasAnyAuthority('ADMIN','MODERATOR','SUPPORT')")
+  public ResponseEntity<PagedResponse<GameResponse>> searchByName(
+      @RequestParam String name, Pageable pageable) {
+    return ResponseEntity.ok(gameService.searchByName(name, pageable));
+  }
 
-    @GetMapping("/by-genre")
-    @Operation(summary = "List games by genre", description = "Returns games filtered by genre (FPS, MOBA, RPG, etc.).")
-    @ApiResponses({ @ApiResponse(responseCode = "200", description = "Success"), @ApiResponse(responseCode = "401", description = "Unauthorized"), @ApiResponse(responseCode = "403", description = "Forbidden") })
-    @PreAuthorize("hasAnyAuthority('ADMIN','MODERATOR','SUPPORT')")
-    public ResponseEntity<PagedResponse<GameResponse>> getGamesByGenre(@RequestParam Genre genre, Pageable pageable) {
-        return ResponseEntity.ok(gameService.getGamesByGenre(genre, pageable));
-    }
+  @GetMapping("/by-genre")
+  @Operation(
+      summary = "List games by genre",
+      description = "Returns games filtered by genre (FPS, MOBA, RPG, etc.).")
+  @ApiResponses({
+    @ApiResponse(responseCode = "200", description = "Success"),
+    @ApiResponse(responseCode = "401", description = "Unauthorized"),
+    @ApiResponse(responseCode = "403", description = "Forbidden")
+  })
+  @PreAuthorize("hasAnyAuthority('ADMIN','MODERATOR','SUPPORT')")
+  public ResponseEntity<PagedResponse<GameResponse>> getGamesByGenre(
+      @RequestParam Genre genre, Pageable pageable) {
+    return ResponseEntity.ok(gameService.getGamesByGenre(genre, pageable));
+  }
 
-    @PostMapping
-    @Operation(summary = "Create game", description = "Creates a new game. Requires ADMIN.")
-    @ApiResponses({ @ApiResponse(responseCode = "200", description = "Created"), @ApiResponse(responseCode = "400", description = "Validation error"), @ApiResponse(responseCode = "401", description = "Unauthorized"), @ApiResponse(responseCode = "403", description = "Forbidden") })
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<GameResponse> createGame(@Valid @RequestBody GameCreateRequest request) {
-        return ResponseEntity.ok(gameService.createGame(request));
-    }
+  @PostMapping
+  @Operation(summary = "Create game", description = "Creates a new game. Requires ADMIN.")
+  @ApiResponses({
+    @ApiResponse(responseCode = "200", description = "Created"),
+    @ApiResponse(responseCode = "400", description = "Validation error"),
+    @ApiResponse(responseCode = "401", description = "Unauthorized"),
+    @ApiResponse(responseCode = "403", description = "Forbidden")
+  })
+  @PreAuthorize("hasAuthority('ADMIN')")
+  public ResponseEntity<GameResponse> createGame(@Valid @RequestBody GameCreateRequest request) {
+    return ResponseEntity.ok(gameService.createGame(request));
+  }
 
-    @PutMapping("/{id}")
-    @Operation(summary = "Update game", description = "Updates an existing game by id.")
-    @ApiResponses({ @ApiResponse(responseCode = "200", description = "Success"), @ApiResponse(responseCode = "400", description = "Validation error"), @ApiResponse(responseCode = "401", description = "Unauthorized"), @ApiResponse(responseCode = "403", description = "Forbidden"), @ApiResponse(responseCode = "404", description = "Game not found") })
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<GameResponse> updateGame(@PathVariable Long id, @Valid @RequestBody GameUpdateRequest request) {
-        return ResponseEntity.ok(gameService.updateGame(id, request));
-    }
+  @PutMapping("/{id}")
+  @Operation(summary = "Update game", description = "Updates an existing game by id.")
+  @ApiResponses({
+    @ApiResponse(responseCode = "200", description = "Success"),
+    @ApiResponse(responseCode = "400", description = "Validation error"),
+    @ApiResponse(responseCode = "401", description = "Unauthorized"),
+    @ApiResponse(responseCode = "403", description = "Forbidden"),
+    @ApiResponse(responseCode = "404", description = "Game not found")
+  })
+  @PreAuthorize("hasAuthority('ADMIN')")
+  public ResponseEntity<GameResponse> updateGame(
+      @PathVariable Long id, @Valid @RequestBody GameUpdateRequest request) {
+    return ResponseEntity.ok(gameService.updateGame(id, request));
+  }
 
-    @DeleteMapping("/{id}")
-    @Operation(summary = "Delete game", description = "Deletes a game by id. Returns 204 No Content.")
-    @ApiResponses({ @ApiResponse(responseCode = "204", description = "Deleted"), @ApiResponse(responseCode = "401", description = "Unauthorized"), @ApiResponse(responseCode = "403", description = "Forbidden"), @ApiResponse(responseCode = "404", description = "Game not found") })
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Void> deleteGame(@PathVariable Long id) {
-        gameService.deleteGame(id);
-        return ResponseEntity.noContent().build();
-    }
+  @DeleteMapping("/{id}")
+  @Operation(summary = "Delete game", description = "Deletes a game by id. Returns 204 No Content.")
+  @ApiResponses({
+    @ApiResponse(responseCode = "204", description = "Deleted"),
+    @ApiResponse(responseCode = "401", description = "Unauthorized"),
+    @ApiResponse(responseCode = "403", description = "Forbidden"),
+    @ApiResponse(responseCode = "404", description = "Game not found")
+  })
+  @PreAuthorize("hasAuthority('ADMIN')")
+  public ResponseEntity<Void> deleteGame(@PathVariable Long id) {
+    gameService.deleteGame(id);
+    return ResponseEntity.noContent().build();
+  }
 }

@@ -22,62 +22,65 @@ import java.util.Map;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-            .csrf(AbstractHttpConfigurer::disable)
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/v1/public/**").permitAll()
-                .requestMatchers("/actuator/**").permitAll()
-                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/scalar.html").permitAll()
-                .anyRequest().authenticated()
-            )
-            .oauth2ResourceServer(oauth2 -> oauth2
-                .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
-            );
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http.csrf(AbstractHttpConfigurer::disable)
+        .sessionManagement(
+            session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .authorizeHttpRequests(
+            auth ->
+                auth.requestMatchers("/api/v1/public/**")
+                    .permitAll()
+                    .requestMatchers("/actuator/**")
+                    .permitAll()
+                    .requestMatchers(
+                        "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/scalar.html")
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated())
+        .oauth2ResourceServer(
+            oauth2 ->
+                oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())));
 
-        return http.build();
-    }
+    return http.build();
+  }
 
-    @Bean
-    public JwtAuthenticationConverter jwtAuthenticationConverter() {
-        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
-        
-        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwt -> {
-            Collection<GrantedAuthority> authorities = new ArrayList<>();
+  @Bean
+  public JwtAuthenticationConverter jwtAuthenticationConverter() {
+    JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
 
-            // Extract realm roles from Keycloak token
-            Map<String, Object> realmAccess = jwt.getClaim("realm_access");
-            if (realmAccess != null) {
-                @SuppressWarnings("unchecked")
-                List<String> roles = (List<String>) realmAccess.get("roles");
-                if (roles != null) {
-                    roles.forEach(role ->
-                        authorities.add(new SimpleGrantedAuthority(role))
-                    );
-                }
+    jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(
+        jwt -> {
+          Collection<GrantedAuthority> authorities = new ArrayList<>();
+
+          // Extract realm roles from Keycloak token
+          Map<String, Object> realmAccess = jwt.getClaim("realm_access");
+          if (realmAccess != null) {
+            @SuppressWarnings("unchecked")
+            List<String> roles = (List<String>) realmAccess.get("roles");
+            if (roles != null) {
+              roles.forEach(role -> authorities.add(new SimpleGrantedAuthority(role)));
             }
+          }
 
-            // Extract client roles if needed
-            Map<String, Object> resourceAccess = jwt.getClaim("resource_access");
-            if (resourceAccess != null) {
-                @SuppressWarnings("unchecked")
-                Map<String, Object> clientAccess = (Map<String, Object>) resourceAccess.get("gameadmin-api");
-                if (clientAccess != null) {
-                    @SuppressWarnings("unchecked")
-                    List<String> clientRoles = (List<String>) clientAccess.get("roles");
-                    if (clientRoles != null) {
-                        clientRoles.forEach(role ->
-                            authorities.add(new SimpleGrantedAuthority(role))
-                        );
-                    }
-                }
+          // Extract client roles if needed
+          Map<String, Object> resourceAccess = jwt.getClaim("resource_access");
+          if (resourceAccess != null) {
+            @SuppressWarnings("unchecked")
+            Map<String, Object> clientAccess =
+                (Map<String, Object>) resourceAccess.get("gameadmin-api");
+            if (clientAccess != null) {
+              @SuppressWarnings("unchecked")
+              List<String> clientRoles = (List<String>) clientAccess.get("roles");
+              if (clientRoles != null) {
+                clientRoles.forEach(role -> authorities.add(new SimpleGrantedAuthority(role)));
+              }
             }
+          }
 
-            return authorities;
+          return authorities;
         });
 
-        return jwtAuthenticationConverter;
-    }
+    return jwtAuthenticationConverter;
+  }
 }

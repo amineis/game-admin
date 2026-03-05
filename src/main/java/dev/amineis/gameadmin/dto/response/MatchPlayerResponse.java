@@ -9,9 +9,9 @@ import lombok.*;
 @Builder
 public class MatchPlayerResponse {
 
-    private Long id;
-    private Long playerId;
-    private String playerUsername;
-    private String team;
-    private Integer score;
+  private Long id;
+  private Long playerId;
+  private String playerUsername;
+  private String team;
+  private Integer score;
 }

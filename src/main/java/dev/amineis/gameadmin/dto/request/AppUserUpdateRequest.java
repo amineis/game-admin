@@ -16,13 +16,13 @@ import lombok.Setter;
 @Builder
 public class AppUserUpdateRequest {
 
-    @Size(max = 50, message = "Username must not exceed 50 characters")
-    private String username;
+  @Size(max = 50, message = "Username must not exceed 50 characters")
+  private String username;
 
-    @Email(message = "Email must be valid")
-    private String email;
+  @Email(message = "Email must be valid")
+  private String email;
 
-    private String passwordHash;
+  private String passwordHash;
 
-    private Role role;
+  private Role role;
 }

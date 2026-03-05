@@ -15,8 +15,8 @@ import lombok.Setter;
 @Builder
 public class MatchUpdateRequest {
 
-    @Size(max = 30, message = "Region must not exceed 30 characters")
-    private String region;
+  @Size(max = 30, message = "Region must not exceed 30 characters")
+  private String region;
 
-    private MatchStatus status;
+  private MatchStatus status;
 }

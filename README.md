@@ -1,6 +1,7 @@
 # GameAdmin Backend
 
-GameAdmin is a Spring Boot backend for game operations and moderation workflows (players, matches, reports, bans, and admin users).  
+GameAdmin is a Spring Boot backend for game operations and moderation workflows (players, matches, reports, bans, and
+admin users).  
 I built it to centralize moderation/admin tools in one API with role-based access and Keycloak JWT security.
 
 ## Installation

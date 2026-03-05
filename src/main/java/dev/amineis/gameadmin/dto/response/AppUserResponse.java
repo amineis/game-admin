@@ -1,9 +1,8 @@
 package dev.amineis.gameadmin.dto.response;
 
 import dev.amineis.gameadmin.enums.Role;
-import lombok.*;
-
 import java.time.Instant;
+import lombok.*;
 
 @Getter
 @Setter
@@ -12,9 +11,9 @@ import java.time.Instant;
 @Builder
 public class AppUserResponse {
 
-    private Long id;
-    private String username;
-    private String email;
-    private Role role;
-    private Instant createdAt;
+  private Long id;
+  private String username;
+  private String email;
+  private Role role;
+  private Instant createdAt;
 }

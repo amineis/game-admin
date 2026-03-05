@@ -13,11 +13,14 @@ import lombok.*;
 @Schema(description = "Request body to add a player to a match")
 public class MatchPlayerRequest {
 
-    @Schema(description = "Player ID to add", example = "1", requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotNull(message = "Player ID is required")
-    private Long playerId;
+  @Schema(
+      description = "Player ID to add",
+      example = "1",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @NotNull(message = "Player ID is required")
+  private Long playerId;
 
-    @Schema(description = "Team name or identifier", example = "Team A")
-    @Size(max = 20, message = "Team name must not exceed 20 characters")
-    private String team;
+  @Schema(description = "Team name or identifier", example = "Team A")
+  @Size(max = 20, message = "Team name must not exceed 20 characters")
+  private String team;
 }

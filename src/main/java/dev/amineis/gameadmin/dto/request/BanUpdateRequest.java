@@ -14,6 +14,6 @@ import lombok.Setter;
 @Builder
 public class BanUpdateRequest {
 
-    @Size(max = 255, message = "Reason must not exceed 255 characters")
-    private String reason;
+  @Size(max = 255, message = "Reason must not exceed 255 characters")
+  private String reason;
 }
